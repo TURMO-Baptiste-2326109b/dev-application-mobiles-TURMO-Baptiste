@@ -13,7 +13,6 @@ const TaskList = ({ tasks, categories, onCompleteTask, onDeleteTask }) => {
     };
 
     const filteredTasks = tasks.filter(task => {
-        // Filter out tasks with due dates older than a week
         const oneWeekAgo = new Date();
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
@@ -21,18 +20,15 @@ const TaskList = ({ tasks, categories, onCompleteTask, onDeleteTask }) => {
             return false;
         }
 
-        // Filter by completion status
         if (!showAll && task.statut) {
             return false;
         }
 
-        // Filter by search term
         if (searchTerm.length >= 3 &&
             !task.intitule.toLowerCase().includes(searchTerm.toLowerCase())) {
             return false;
         }
 
-        // Filter by category
         if (filterCategory && !task.categories.includes(filterCategory)) {
             return false;
         }
@@ -40,7 +36,6 @@ const TaskList = ({ tasks, categories, onCompleteTask, onDeleteTask }) => {
         return true;
     });
 
-    // Sort tasks
     const sortedTasks = [...filteredTasks].sort((a, b) => {
         switch (sortBy) {
             case 'intitule':

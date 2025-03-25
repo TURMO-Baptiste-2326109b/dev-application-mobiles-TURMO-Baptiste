@@ -9,6 +9,7 @@ function App() {
   const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState(null);
+  const [showSelectionModal, setShowSelectionModal] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -67,6 +68,7 @@ function App() {
   const openModal = (type) => {
     setModalType(type);
     setShowModal(true);
+    setShowSelectionModal(false);
   };
 
   const handleFileUpload = (event) => {
@@ -179,12 +181,31 @@ function App() {
               </div>
           )}
 
-          <div className="modal-selector">
-            <button className="add-button" onClick={() => openModal('task')}>
-              Ajouter tâche
-            </button>
-            <button className="add-button" onClick={() => openModal('category')}>
-              Ajouter catégorie
+          {showSelectionModal && (
+              <div className="selection-modal-overlay">
+                <div className="selection-modal">
+                  <h3>Que souhaitez-vous ajouter ?</h3>
+                  <div className="selection-buttons">
+                    <button className="add-button" onClick={() => openModal('task')}>
+                      Ajouter tâche
+                    </button>
+                    <button className="add-button" onClick={() => openModal('category')}>
+                      Ajouter catégorie
+                    </button>
+                  </div>
+                  <button className="close-button" onClick={() => setShowSelectionModal(false)}>
+                    Annuler
+                  </button>
+                </div>
+              </div>
+          )}
+
+          <div className="fab-container">
+            <button
+                className="fab-button"
+                onClick={() => setShowSelectionModal(true)}
+            >
+              +
             </button>
           </div>
         </div>

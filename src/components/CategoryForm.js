@@ -26,7 +26,7 @@ const CategoryForm = ({ onSubmit, onCancel }) => {
 
     const handleColorSelect = (color) => {
         setCategory({
-
+            ...category,
             couleur: color
         });
     };

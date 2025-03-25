@@ -1,5 +1,5 @@
 body {
-  background-color: #d6cec6;
+  background-color:  #2b2a33;
   margin: 0;
   padding: 0;
 }
@@ -42,7 +42,7 @@ body {
   margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  background-color: white;
+  background-color: #eaecee;
 }
 
 .task-item.completed {
@@ -184,7 +184,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: white;
+  background-color:  #eaecee;
   color: black;
   padding: 0 30px;
   height: 80px;
@@ -259,4 +259,85 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expand-toggle {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 5px;
+}
+
+.task-description {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+  padding: 5px 0;
+  border-top: 1px dotted #ddd;
+}
+
+.selection-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.selection-modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  width: 300px;
+  text-align: center;
+}
+
+.selection-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.close-button {
+  padding: 8px 16px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fab-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.fab-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  color: white;
+  font-size: 24px;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fab-button:hover {
+  background-color: #388e3c;
 }

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const TaskItem = ({ task, categories, onComplete, onDelete, onCategoryClick }) => {
-    const displayCategories = categories.slice(0, 2);
+    const [expanded, setExpanded] = useState(false);
+    const displayCategories = expanded ? categories : categories.slice(0, 2);
 
     return (
         <div className={`task-item ${task.statut ? 'completed' : ''} ${task.urgent ? 'urgent' : ''}`}>
@@ -14,7 +15,15 @@ const TaskItem = ({ task, categories, onComplete, onDelete, onCategoryClick }) =
             </div>
 
             <div className="task-content">
-                <h3>{task.intitule}</h3>
+                <div className="task-header">
+                    <h3>{task.intitule}</h3>
+                    <span
+                        className="expand-toggle"
+                        onClick={() => setExpanded(!expanded)}
+                    >
+                        {expanded ? '▼' : '▶'}
+                    </span>
+                </div>
 
                 {task.dateEcheance && (
                     <div className="task-date">
@@ -30,10 +39,16 @@ const TaskItem = ({ task, categories, onComplete, onDelete, onCategoryClick }) =
                             style={{ backgroundColor: category.couleur }}
                             onClick={() => onCategoryClick(category.id)}
                         >
-              {category.intitule}
-            </span>
+                            {category.intitule}
+                        </span>
                     ))}
                 </div>
+
+                {expanded && task.description && (
+                    <div className="task-description">
+                        {task.description}
+                    </div>
+                )}
             </div>
 
             <button className="delete-button" onClick={onDelete}>✖</button>
