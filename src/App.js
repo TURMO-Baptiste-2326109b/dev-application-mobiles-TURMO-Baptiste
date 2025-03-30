@@ -11,6 +11,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState(null);
   const [showSelectionModal, setShowSelectionModal] = useState(false);
+  const [appStarted, setAppStarted] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -29,12 +30,13 @@ function App() {
     localStorage.setItem('categories', JSON.stringify(categories));
   }, [categories]);
 
-  const resetData = () => {
-    if (window.confirm('Voulez-vous vraiment remettre à zéro?')) {
+  const resetData = (skipConfirmation = false) => {
+    if (skipConfirmation || window.confirm('Voulez-vous vraiment remettre à zéro?')) {
       setTasks([]);
       setCategories([]);
       localStorage.removeItem('tasks');
       localStorage.removeItem('categories');
+      setAppStarted(true);
     }
   };
 
@@ -120,6 +122,7 @@ function App() {
 
           setTasks(formattedTasks);
           setCategories(formattedCategories);
+          setAppStarted(true);
           alert('Données chargées avec succès!');
         } else {
           alert('Format de fichier JSON incorrect.');
@@ -143,58 +146,93 @@ function App() {
 
   return (
       <div className="App">
-        <Header
-            onReset={resetData}
-            onImport={handleFileUpload}
-            fileInputRef={fileInputRef}
-        />
+        {!appStarted ? (
+            <div className="start-screen">
+              <div className="start-container">
+                <h1>Todo List</h1>
+                <p>Choisissez comment démarrer l'application</p>
 
-        <div className="content">
-          <TodoList
-              tasks={tasks}
-              categories={categories}
-              onCompleteTask={handleCompleteTask}
-              onDeleteTask={handleDeleteTask}
-          />
+                <div className="start-buttons">
+                  <button
+                      className="start-button"
+                      onClick={() => resetData(true)}
+                  >
+                    Commencer sans données
+                  </button>
 
-          <FormModal
-              isOpen={showModal}
-              type={modalType}
-              categories={categories}
-              onSubmit={handleSubmit}
-              onCancel={() => setShowModal(false)}
-          />
+                  <button
+                      className="start-button"
+                      onClick={() => fileInputRef.current.click()}
+                  >
+                    Charger un backup
+                  </button>
 
-          {showSelectionModal && (
-              <div className="selection-modal-overlay">
-                <div className="selection-modal">
-                  <h3>Que souhaitez-vous ajouter ?</h3>
-                  <div className="selection-buttons">
-                    <button className="add-button" onClick={() => openModal('task')}>
-                      Ajouter tâche
-                    </button>
-                    <button className="add-button" onClick={() => openModal('category')}>
-                      Ajouter catégorie
-                    </button>
-                  </div>
-                  <button className="close-button" onClick={() => setShowSelectionModal(false)}>
-                    Annuler
+                  <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".json"
+                      style={{display: 'none'}}
+                      onChange={handleFileUpload}
+                  />
+                </div>
+              </div>
+            </div>
+        ) : (
+            <>
+              <Header
+                  onReset={resetData}
+                  onImport={handleFileUpload}
+                  fileInputRef={fileInputRef}
+              />
+
+              <div className="content">
+                <TodoList
+                    tasks={tasks}
+                    categories={categories}
+                    onCompleteTask={handleCompleteTask}
+                    onDeleteTask={handleDeleteTask}
+                />
+
+                <FormModal
+                    isOpen={showModal}
+                    type={modalType}
+                    categories={categories}
+                    onSubmit={handleSubmit}
+                    onCancel={() => setShowModal(false)}
+                />
+
+                {showSelectionModal && (
+                    <div className="selection-modal-overlay">
+                      <div className="selection-modal">
+                        <h3>Que souhaitez-vous ajouter ?</h3>
+                        <div className="selection-buttons">
+                          <button className="add-button" onClick={() => openModal('task')}>
+                            Ajouter tâche
+                          </button>
+                          <button className="add-button" onClick={() => openModal('category')}>
+                            Ajouter catégorie
+                          </button>
+                        </div>
+                        <button className="close-button" onClick={() => setShowSelectionModal(false)}>
+                          Annuler
+                        </button>
+                      </div>
+                    </div>
+                )}
+
+                <div className="fab-container">
+                  <button
+                      className="fab-button"
+                      onClick={() => setShowSelectionModal(true)}
+                  >
+                    +
                   </button>
                 </div>
               </div>
-          )}
 
-          <div className="fab-container">
-            <button
-                className="fab-button"
-                onClick={() => setShowSelectionModal(true)}
-            >
-              +
-            </button>
-          </div>
-        </div>
-
-        <Footer />
+              <Footer />
+            </>
+        )}
       </div>
   );
 }

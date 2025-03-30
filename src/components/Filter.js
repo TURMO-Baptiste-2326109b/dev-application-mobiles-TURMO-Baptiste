@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-const Filter = ({ tasks, onFilterChange }) => {
+const Filter = ({ tasks, onFilterChange, filterCategory, setFilterCategory }) => {
     const [showAll, setShowAll] = useState(true);
     const [sortBy, setSortBy] = useState('dateEcheance');
     const [showSortOptions, setShowSortOptions] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterCategory, setFilterCategory] = useState(null);
 
     useEffect(() => {
         const filteredTasks = tasks.filter(task => {
