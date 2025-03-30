@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
-import TaskList from './components/Tasklist';
-import TaskForm from './components/TaskForm';
-import CategoryForm from './components/CategoryForm';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import TodoList from './components/TodoList';
+import FormModal from './components/FormModal';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -71,6 +72,14 @@ function App() {
     setShowSelectionModal(false);
   };
 
+  const handleSubmit = (formData) => {
+    if (modalType === 'task') {
+      handleAddTask(formData);
+    } else {
+      handleAddCategory(formData);
+    }
+  };
+
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -134,52 +143,27 @@ function App() {
 
   return (
       <div className="App">
-        <nav className="navbar">
-          <h1>Todo List</h1>
-          <div>
-            <button className="up-button" onClick={resetData}>Remise à zéro</button>
-            <button
-                className="up-button"
-                onClick={() => fileInputRef.current.click()}
-            >
-              Charger backup
-            </button>
-            <input
-                ref={fileInputRef}
-                type="file"
-                accept=".json"
-                style={{display: 'none'}}
-                onChange={handleFileUpload}
-            />
-          </div>
-        </nav>
+        <Header
+            onReset={resetData}
+            onImport={handleFileUpload}
+            fileInputRef={fileInputRef}
+        />
 
         <div className="content">
-          <TaskList
+          <TodoList
               tasks={tasks}
               categories={categories}
               onCompleteTask={handleCompleteTask}
               onDeleteTask={handleDeleteTask}
           />
 
-          {showModal && (
-              <div className="modal-overlay">
-                <div className="modal">
-                  {modalType === 'task' ? (
-                      <TaskForm
-                          categories={categories}
-                          onSubmit={handleAddTask}
-                          onCancel={() => setShowModal(false)}
-                      />
-                  ) : (
-                      <CategoryForm
-                          onSubmit={handleAddCategory}
-                          onCancel={() => setShowModal(false)}
-                      />
-                  )}
-                </div>
-              </div>
-          )}
+          <FormModal
+              isOpen={showModal}
+              type={modalType}
+              categories={categories}
+              onSubmit={handleSubmit}
+              onCancel={() => setShowModal(false)}
+          />
 
           {showSelectionModal && (
               <div className="selection-modal-overlay">
@@ -209,6 +193,8 @@ function App() {
             </button>
           </div>
         </div>
+
+        <Footer />
       </div>
   );
 }
